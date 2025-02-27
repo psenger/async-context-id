@@ -25,9 +25,9 @@ class TimedMap extends Map {
    * const sessionCache = new TimedMap(1800000); // 30 minute TTL
    */
   constructor(ttl) {
-    super();
-    this.ttl = ttl;
-    this.timeouts = new Map();
+    super()
+    this.ttl = ttl
+    this.timeouts = new Map()
   }
 
   /**
@@ -43,12 +43,12 @@ class TimedMap extends Map {
    *      .set('timestamp', Date.now());
    */
   set(key, value) {
-    if (this.timeouts.has(key)) clearTimeout(this.timeouts.get(key));
+    if (this.timeouts.has(key)) clearTimeout(this.timeouts.get(key))
     this.timeouts.set(
       key,
       setTimeout(() => this.delete(key), this.ttl),
-    );
-    return super.set(key, value);
+    )
+    return super.set(key, value)
   }
 
   /**
@@ -63,10 +63,10 @@ class TimedMap extends Map {
    */
   delete(key) {
     if (this.timeouts.has(key)) {
-      clearTimeout(this.timeouts.get(key));
-      this.timeouts.delete(key);
+      clearTimeout(this.timeouts.get(key))
+      this.timeouts.delete(key)
     }
-    return super.delete(key);
+    return super.delete(key)
   }
 }
-export default TimedMap;
+export default TimedMap
