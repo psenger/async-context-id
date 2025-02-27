@@ -20,6 +20,6 @@ This project directly uses the following open-source packages:
 - [license-checker](https://github.com/davglass/license-checker) - BSD-3-Clause License
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - MIT License
 - [prettier](https://github.com/prettier/prettier) - MIT License
-- [release-please](https://github.com/googleapis/release-please) - Apache-2.0 License
 - [rimraf](https://github.com/isaacs/rimraf) - ISC License
 - [rollup](https://github.com/rollup/rollup) - MIT License
+- [standard-version](https://github.com/conventional-changelog/standard-version) - ISC License
