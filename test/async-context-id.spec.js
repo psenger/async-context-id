@@ -7,7 +7,7 @@ jest.mock('async_hooks', () => {
   }
 
   return {
-    createHook: jest.fn(callbacks => {
+    createHook: jest.fn(() => {
       // hookInit = callbacks.init
       return hook
     }),

@@ -10,7 +10,7 @@ export default [
     files: ["scripts/**/*.js", "src/**/*.js", "examples/**/*.js"],
     languageOptions: {
       globals: globals.node,
-      sourceType: "commonjs"
+      sourceType: "module"
     },
     rules: {
       quotes: ['warn', 'single'],
