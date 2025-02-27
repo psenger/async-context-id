@@ -5,6 +5,7 @@
 *.tgz
 .env
 .eslintcache
+.github
 .grunt
 .lock-wscript
 .next
