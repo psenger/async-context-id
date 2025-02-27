@@ -17,8 +17,8 @@ class LruMap extends Map {
    * const cache = new LruMap(1000);
    */
   constructor(maxSize) {
-    super();
-    this.maxSize = maxSize;
+    super()
+    this.maxSize = maxSize
   }
 
   /**
@@ -35,10 +35,10 @@ class LruMap extends Map {
    */
   set(key, value) {
     if (!this.has(key) && this.size >= this.maxSize) {
-      const firstKey = this.keys().next().value;
-      this.delete(firstKey);
+      const firstKey = this.keys().next().value
+      this.delete(firstKey)
     }
-    return super.set(key, value);
+    return super.set(key, value)
   }
 }
-export default LruMap;
+export default LruMap

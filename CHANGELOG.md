@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/psenger/async-context-id/compare/v0.0.1...v0.1.1) (2025-02-27)
+
+
+### Bug Fixes
+
+* 10 - trying to get the docs workiing ([778fac6](https://github.com/psenger/async-context-id/commit/778fac6d50f14c6ba1d6df2c00b936994886bfac))
+* 10 updated the doc ([f87888c](https://github.com/psenger/async-context-id/commit/f87888c11deb4567e84ed96c2a2b0a4b74da1746))
+* added github docs. ([5db1d30](https://github.com/psenger/async-context-id/commit/5db1d307f9f63d23e182400e941f77a1b5d0f2c9))
+* Fix the npm ignore... there are way to many files included. ([861eb87](https://github.com/psenger/async-context-id/commit/861eb876165f8e5efe0486a97f50c092033c0d01))
+* the package scripts for clean up where wrong ([7321f41](https://github.com/psenger/async-context-id/commit/7321f415ecba43a436f7cb57f276168129e712f2))
+* tuned the commands a litte ([4f99b12](https://github.com/psenger/async-context-id/commit/4f99b1254486a37bcf6748a885c65645b0a0762f))
+
+## [0.1.0](https://github.com/psenger/async-context-id/compare/v0.0.1...v0.1.0) (2025-02-27)
+
+
+### Bug Fixes
+
+* 10 - trying to get the docs workiing ([778fac6](https://github.com/psenger/async-context-id/commit/778fac6d50f14c6ba1d6df2c00b936994886bfac))
+* 10 updated the doc ([f87888c](https://github.com/psenger/async-context-id/commit/f87888c11deb4567e84ed96c2a2b0a4b74da1746))
+* added github docs. ([5db1d30](https://github.com/psenger/async-context-id/commit/5db1d307f9f63d23e182400e941f77a1b5d0f2c9))
+* Fix the npm ignore... there are way to many files included. ([861eb87](https://github.com/psenger/async-context-id/commit/861eb876165f8e5efe0486a97f50c092033c0d01))
+* the package scripts for clean up where wrong ([7321f41](https://github.com/psenger/async-context-id/commit/7321f415ecba43a436f7cb57f276168129e712f2))
+* tuned the commands a litte ([4f99b12](https://github.com/psenger/async-context-id/commit/4f99b1254486a37bcf6748a885c65645b0a0762f))
+
 ### 0.0.1 (2025-02-27)
 
 

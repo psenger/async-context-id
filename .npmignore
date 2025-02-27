@@ -37,6 +37,7 @@ npm-debug.log*
 pids
 rollup.config.js
 scripts
+src/
 storybook-static
 test
 tests/
