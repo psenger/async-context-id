@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/psenger/async-context-id/compare/v0.1.1...v0.1.2) (2025-02-27)
+
+
+### Bug Fixes
+
+* 10 no more source code in the npm ([67fc417](https://github.com/psenger/async-context-id/commit/67fc4171b9d17b4dfe9b399b96314f9296317e3a))
+
 ### [0.1.1](https://github.com/psenger/async-context-id/compare/v0.0.1...v0.1.1) (2025-02-27)
 
 
