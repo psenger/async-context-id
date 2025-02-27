@@ -43,13 +43,14 @@ A lightweight, powerful correlation ID tracking and context store written for No
   * [Express Middleware](#express-middleware)
     + [`correlation-middleware.js`](#correlation-middlewarejs)
     + [`app.js`](#appjs)
-    + [`controller.js`](#controllerjs)
+    + [`simple-controller.js`](#simple-controllerjs)
   * [Winston Logger Integration](#winston-logger-integration)
 - [‼️ Caution - Memory Management Strategies](#%E2%80%BC%EF%B8%8F-caution---memory-management-strategies)
+- [‼️ Caution - Correlation ID with `UUID`](#%E2%80%BC%EF%B8%8F-caution---correlation-id-with-uuid)
 - [‼️ Limitations](#%E2%80%BC%EF%B8%8F-limitations)
   * [Untested pattern - **Process Next Tick**](#untested-pattern---process-next-tick)
   * [Untested pattern - **Node.js Core Module Callbacks** (like fs, http, etc.):](#untested-pattern---nodejs-core-module-callbacks-like-fs-http-etc)
-  * [Untested pattern - Fixing](#untested-pattern---fixing)
+  * [Solution to Untested pattern](#solution-to-untested-pattern)
 - [Contributing](#contributing)
   * [Rules](#rules)
   * [Commit Message](#commit-message)
@@ -613,7 +614,7 @@ to ensure correlation IDs are available throughout the entire request lifecycle.
 
 <!--START_CODE_FENCE_SECTION:javascript:file:examples/correlation-middleware.js-->
 ```javascript
-const {AsyncContextId} = require('../dist/index')
+const {AsyncContextId} = require('../dist/index') // '@psenger/async-context-id'
 const asyncContextId = new AsyncContextId()
 const correlationMiddleware = () => (req, res, next) => {
   try {
@@ -656,48 +657,61 @@ module.exports = app
 ```
 <!--END_CODE_FENCE_SECTION:javascript:file:examples/app.js-->
 
-#### `controller.js`
+#### `simple-controller.js`
 
+<!--START_CODE_FENCE_SECTION:javascript:file:examples/simple-controller.js-->
 ```javascript
-/** controller.js **/
-const AsyncContextId = require('../src/async-context-id')
+const {AsyncContextId} = require('../dist/index') // '@psenger/async-context-id'
 const TRACKER = new AsyncContextId()
 module.exports = function (req, res) {
   const id = req.params.id
   const correlationId = TRACKER.getContext().correlationId
   console.log(`${correlationId} saw ${id} in controller`)
+  TRACKER.setContext({
+    metadata: {
+      id,
+    }
+  })
+  // do something else here which will expose meta upstream
 }
+
 ```
+<!--END_CODE_FENCE_SECTION:javascript:file:examples/simple-controller.js-->
 
 ### Winston Logger Integration
 
+<!--START_CODE_FENCE_SECTION:javascript:file:examples/winston-logger.js-->
 ```javascript
-const Tracker = require('../src/async-context-id')
-const tracker = new Tracker()
+const winston = require('winston')
+const {AsyncContextId} = require('../dist/index') // '@psenger/async-context-id'
+
+const TRACKER = new AsyncContextId()
 
 const logger = winston.createLogger({
-    format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.json(),
-        winston.format((info) => {
-            const context = tracker.getContext();
-            return {
-                ...info,
-                correlationId: context?.correlationId || 'no-correlation-id',
-                metadata: context?.metadata || {}
-            };
-        })()
-    ),
-    transports: [
-        new winston.transports.Console()
-    ]
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json(),
+    winston.format((info) => {
+      const context = TRACKER.getContext();
+      return {
+        ...info,
+        correlationId: context?.correlationId || 'no-correlation-id',
+        metadata: context?.metadata || {}
+      };
+    })()
+  ),
+  transports: [
+    new winston.transports.Console()
+  ]
 });
+
 ```
+<!--END_CODE_FENCE_SECTION:javascript:file:examples/winston-logger.js-->
 
 ## ‼️ Caution - Memory Management Strategies
 
-All scaling systems degrade when affected by memory leaks. This module addresses such leaks
-through two configurable Map implementations for context tracking:
+All scaling systems degrade when affected by memory leaks. This module hosts a single map
+and addresses such leaks through two configurable Map implementations for context tracking:
 
 * LRU (Least Recently Used) Map
 * Timed Map
@@ -705,35 +719,42 @@ through two configurable Map implementations for context tracking:
 These maps can be configured during AsyncContextId initialization. As AsyncContextId operates
 as a singleton, the map implementation must be set at creation and remains immutable.
 
-## ‼️ Limitations
+## ‼️ Caution - Correlation ID with `UUID`
 
-The async hooks implementation tracks context through EventEmitters, Timers, and Node.js
-core callbacks. However, as async hooks remain experimental, context propagation should be
-tested extensively in production scenarios. In the event that something does not work as
-expected, there are some Untested pattern and suggested work around. Remember it is better
-to error on the side of caution rather than create a memory leak.
-
-**UUID Generation:** The implementation uses non-cryptographic UUID generation to prevent recursive
-async hook triggers that would occur with Node's Crypto module, where internal crypto operations
-would initiate new async hooks.
+The default implementation of correlation ID uses non-cryptographic UUID generation to prevent recursive
+async hook triggers that would otherwise occur with Node's Crypto module (internal crypto operations
+would initiate new async hooks). Since this is based on UUID v4, it may be necessary for consumers
+to increase the complexity of the correlation ID. Therefore, this functionality has been exposed as
+an option ( `correlationIdFn` ).
 
 e.g.
 ```javascript
 // Safe UUID v4 implementation without Crypto
-#generateCorrelationId() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0
-    const v = c === 'x' ? r : (r & 0x3 | 0x8)
-    return v.toString(16)
-  })
+generateCorrelationId() {
+  if (this.correlationIdFn) {
+    return this.correlationIdFn()
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 ```
+
+## ‼️ Limitations
+
+The async hooks implementation tracks context through EventEmitters, Timers, and Node.js
+core callbacks. However, as async hooks remain experimental, context propagation should be
+tested extensively in production like scenarios. In the event that something does not work as
+expected, there are some untested patterns and suggested work around. Remember it is better
+to error on the side of caution rather than create a memory leak.
 
 ### Untested pattern - **Process Next Tick**
 
 ```javascript
 process.nextTick(() => {
-    // context is lost
+    // context may get lost
     const context = tracker.getContext(); // will create new context
 });
 ```
@@ -743,14 +764,15 @@ process.nextTick(() => {
 ```javascript
 const fs = require('fs');
 fs.readFile('somefile.txt', (err, data) => {
-    // context is lost
+    // context may get lost
     const context = tracker.getContext(); // will create new context
 });
 ```
 
-### Untested pattern - Fixing
+### Solution to Untested pattern
 
-Despite the untested patterns, these callbacks can be wrapped and bound.
+Despite the untested patterns, these callbacks can be wrapped and bound. Word of caution, Arrow Functions
+can not be bound therefore, you must use `function` declaration.
 
 ```javascript
 class CorrelationTracker {
@@ -887,8 +909,8 @@ This project directly uses the following open-source packages:
 - [license-checker](https://github.com/davglass/license-checker) - BSD-3-Clause License
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc) - MIT License
 - [prettier](https://github.com/prettier/prettier) - MIT License
-- [release-please](https://github.com/googleapis/release-please) - Apache-2.0 License
 - [rimraf](https://github.com/isaacs/rimraf) - ISC License
 - [rollup](https://github.com/rollup/rollup) - MIT License
+- [standard-version](https://github.com/conventional-changelog/standard-version) - ISC License
 
 <!--END_SECTION:file:THIRD_PARTY_NOTICES.md-->
