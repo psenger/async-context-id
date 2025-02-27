@@ -14,7 +14,7 @@
     "test:coverage": "npm test -- --coverage",
     "test:lint": "eslint ./src ./test",
     "test:lint:fix": "eslint ./src ./test --fix",
-    "clean": "clean:dist && clean:coverage && clean:docs",
+    "clean": "npm run clean:dist && npm run clean:coverage && npm run clean:docs",
     "clean:dist": "rimraf dist",
     "clean:coverage": "rimraf coverage",
     "clean:docs": "rimraf docs/*",
