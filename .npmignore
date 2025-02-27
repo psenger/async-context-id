@@ -7,6 +7,7 @@
 .editorconfig
 .env
 .eslintcache
+.github
 .grunt
 .idea
 .lock-wscript
