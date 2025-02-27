@@ -1,6 +1,6 @@
 {
   "name": "@psenger/async-context-id",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A lightweight, powerful correlation ID tracking and context store written for Node.js that automatically propagates context through async operations using Node's `async_hooks`. Perfect for distributed tracing, request tracking, and logging correlation in micro services architectures.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
