@@ -20,7 +20,7 @@
     "clean:docs": "rimraf docs/*",
     "format": "prettier --write \"src/*.js\" \"test/*.spec.{js}\"",
     "prepublishOnly": "npm run clean && npm run build",
-    "release": "release-please"
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -70,8 +70,8 @@
     "license-checker": "^25.0.1",
     "markdown-toc": "^1.2.0",
     "prettier": "^3.4.2",
-    "release-please": "^16.17.0",
     "rimraf": "^6.0.1",
-    "rollup": "^4.34.4"
+    "rollup": "^4.34.4",
+    "standard-version": "^9.5.0"
   }
 }
