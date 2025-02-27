@@ -1,0 +1,77 @@
+{
+  "name": "@psenger/async-context-id",
+  "version": "0.0.1",
+  "description": "A lightweight, powerful correlation ID tracking and context store written for Node.js that automatically propagates context through async operations using Node's `async_hooks`. Perfect for distributed tracing, request tracking, and logging correlation in micro services architectures.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "build:watch": "rollup -c rollup.config.mjs -w",
+    "build:readme": "node scripts/build-readme.js",
+    "build:github-docs": "node scripts/build-github-doc-readme.js && jsdoc src/*.js -d ./docs/ -u ./tutorials -R ./docs/README.md",
+    "pretest": "npm run build",
+    "test": "jest",
+    "test:coverage": "npm test -- --coverage",
+    "test:lint": "eslint ./src ./test",
+    "test:lint:fix": "eslint ./src ./test --fix",
+    "clean": "clean:dist && clean:coverage && clean:docs",
+    "clean:dist": "rimraf dist",
+    "clean:coverage": "rimraf coverage",
+    "clean:docs": "rimraf docs/*",
+    "format": "prettier --write \"src/*.js\" \"test/*.spec.{js}\"",
+    "prepublishOnly": "npm run clean && npm run build",
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psenger/async-context-id.git"
+  },
+  "keywords": [
+    "correlation",
+    "logging",
+    "debug",
+    "express",
+    "middleware",
+    "correlation-id",
+    "request-id",
+    "asynchook",
+    "correlationid",
+    "nodejs",
+    "distributed-tracing",
+    "async-hooks",
+    "context",
+    "tracking",
+    "logging",
+    "microservices"
+  ],
+  "author": {
+    "name": "Philip A Senger",
+    "email": "philip.a.senger@cngrgroup.com",
+    "url": "https://github.com/psenger"
+  },
+  "contributors": [],
+  "engines": {
+    "node": ">=14"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psenger/async-context-id/issues"
+  },
+  "homepage": "https://github.com/psenger/async-context-id#readme",
+  "devDependencies": {
+    "@psenger/markdown-fences": "^1.2.0",
+    "eslint": "^9.19.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "jest": "^29.7.0",
+    "jest-html-reporters": "^3.1.7",
+    "jsdoc": "^4.0.4",
+    "license-checker": "^25.0.1",
+    "markdown-toc": "^1.2.0",
+    "prettier": "^3.4.2",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.34.4",
+    "standard-version": "^9.5.0"
+  }
+}
